@@ -130,6 +130,7 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
 PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/configs/gps/gps.conf:system/etc/gps.conf \
 	$(LOCAL_PATH)/ramdisk/enableswap.sh:root/enableswap.sh \
 	$(LOCAL_PATH)/ramdisk/factory_init.project.rc:root/factory_init.project.rc \
 	$(LOCAL_PATH)/ramdisk/factory_init.rc:root/factory_init.rc \
