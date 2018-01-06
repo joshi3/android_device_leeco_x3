@@ -22,12 +22,14 @@
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
-        <!-- Can't use this without a Dolby(TM) license for DD(TM) and DDP(TM)
         <MediaCodec name="OMX.ffmpeg.ac3.decoder"    type="audio/ac3" >
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
-        -->
+        <MediaCodec name="OMX.ffmpeg.alac.decoder"   type="audio/alac" >
+            <Limit name="channel-count" max="8" />
+            <Limit name="sample-rate" ranges="8000-192000" />
+        </MediaCodec>
         <MediaCodec name="OMX.ffmpeg.ape.decoder"    type="audio/x-ape" >
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
@@ -36,7 +38,9 @@
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
-        <MediaCodec name="OMX.ffmpeg.dts.decoder"    type="audio/dts" >
+        <MediaCodec name="OMX.ffmpeg.dts.decoder">
+            <Type name="audio/vnd.dts" />
+            <Type name="audio/dts" />
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
@@ -48,7 +52,15 @@
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.mp3.decoder"    type="audio/mpeg" >
+            <Limit name="channel-count" max="8" />
+            <Limit name="sample-rate" ranges="8000-192000" />
+        </MediaCodec>
         <MediaCodec name="OMX.ffmpeg.ra.decoder"     type="audio/vnd.rn-realaudio" >
+            <Limit name="channel-count" max="8" />
+            <Limit name="sample-rate" ranges="8000-192000" />
+        </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.vorbis.decoder" type="audio/vorbis" >
             <Limit name="channel-count" max="8" />
             <Limit name="sample-rate" ranges="8000-192000" />
         </MediaCodec>
@@ -78,6 +90,33 @@
             <Limit name="alignment" value="2x2" />
             <Feature name="adaptive-playback" />
         </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.h263.decoder"   type="video/3gpp">
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.h264.decoder"   type="video/avc">
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.hevc.decoder"   type="video/hevc">
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+        <MediaCodec name="OMX.ffmpeg.vp8.decoder" type="video/x-vnd.on2.vp8">
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Feature name="adaptive-playback" />
+        </MediaCodec>
+	<!--
+	<MediaCodec name="OMX.ffmpeg.vp9.decoder" type="video/x-vnd.on2.vp9">
+            <Limit name="size" min="2x2" max="2048x2048" />
+            <Limit name="alignment" value="2x2" />
+            <Feature name="adaptive-playback" />
+	</MediaCodec>
+	-->
         <MediaCodec name="OMX.ffmpeg.rv.decoder"     type="video/vnd.rn-realvideo">
             <Limit name="size" min="2x2" max="2048x2048" />
             <Limit name="alignment" value="2x2" />
