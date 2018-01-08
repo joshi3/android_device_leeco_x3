@@ -25,8 +25,8 @@
 /* static const struct fs_path_config android_device_dirs[] = { }; */
 
 #ifdef TARGET_HAS_LEGACY_CAMERA_HAL1
-#define AID_CAMERASERVER  AID_MEDIA /* cameraserver process */
-#else
+//#define AID_CAMERASERVER  AID_MEDIA /* cameraserver process */
+//#else
 #define AID_CAMERASERVER  1047  /* cameraserver process */
 #endif
 

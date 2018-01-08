@@ -4,9 +4,6 @@ LOCAL_PATH := device/leeco/x3
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
-MTK_K64_SUPPORT := yes
-USE_CAMERA_STUB := true
-
 ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_NO_BOOTLOADER := true
 
@@ -194,6 +191,7 @@ TARGET_CAMERASERVICE_CLOSES_NATIVE_HANDLES := true
 USE_CAMERA_STUB := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_CAMERA_APP : Camera2
+MTK_K64_SUPPORT := yes
 
 # Charger
 BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
@@ -217,3 +215,8 @@ PRODUCT_PROPERTY_OVERRIDES += net.tethering.noprovisioning=true
  net.tethering.noprovisioning=true \
  ro.setupwizard.rotation_locked=true
  
+ # DEXPREOPT
+ifeq ($(TARGET_BUILD_VARIANT),user)
+WITH_DEXPREOPT := true
+DONT_DEXPREOPT_PREBUILTS := true
+endif

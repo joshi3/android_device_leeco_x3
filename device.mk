@@ -11,11 +11,20 @@ $(call inherit-product, vendor/leeco/x3/x3-vendor-blobs.mk)
 # Folder path
 LOCAL_PATH := device/leeco/x3
 
+
+# Manifest
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/manifest.xml:system/vendor/manifest.xml
+
+	# TWRP
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/twrp.fstab:recovery/root/etc/twrp.fstab
+
 # Overlay Folder
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Screen density
-PRODUCT_AAPT_CONFIG := normal xxhdpi
+PRODUCT_AAPT_CONFIG := normal xhdpi xxhdpi
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Recovery allowed devices
@@ -44,6 +53,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	librs_jni \
 	libnl_2 \
+	libemoji \
 	com.android.future.usb.accessory
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -58,9 +68,9 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 ifeq (lineage_x3,$(TARGET_PRODUCT))	#this is included only in lineage atm as some other roms have issue with this
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	dalvik.vm.dex2oat-Xms=64m \
-	dalvik.vm.dex2oat-Xmx=64m \
+	dalvik.vm.dex2oat-Xmx=512m \
 	dalvik.vm.image-dex2oat-Xms=64m \
-	dalvik.vm.image-dex2oat-Xmx=512m
+	dalvik.vm.image-dex2oat-Xmx=64m
 endif
 
 # PRODUCT_PROPERTY_OVERRIDES
@@ -83,10 +93,12 @@ PRODUCT_PACKAGES += \
 	libtinyxml \
 	audio_policy.stub \
 	libtinymix \
-	libfs_mgr
+	libfs_mgr \
+	SoundRecorder
 
 # Wifi
 PRODUCT_PACKAGES += \
+	android.hardware.wifi@1.0-service \
 	lib_driver_cmd_mt66xx \
 	libwpa_client \
 	hostapd \
@@ -278,22 +290,22 @@ PRODUCT_PACKAGES += \
 	muxreport \
 	terservice
 
-# Display
+# MTK Helpers
 PRODUCT_PACKAGES += \
-	libion
+    libion \
+    libwvmsym \
+    libiodev
 
 # GPS
 PRODUCT_PACKAGES += \
-	gps.mt6795 \
-	libcurl
+    android.hardware.gnss@1.0-impl \
+    gps.mt6752 \
+    libcurl \
+    YGPS
 
 # Mediaserver with system group
 PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/etc/init/mediaserver.rc:system/etc/init/mediaserver.rc \
-	$(LOCAL_PATH)/etc/init/cameraserver.rc:system/etc/init/cameraserver.rc \
-	$(LOCAL_PATH)/etc/init/drmserver.rc:system/etc/init/drmserver.rc \
-	$(LOCAL_PATH)/etc/init/mediacodec.rc:system/etc/init/mediacodec.rc \
-	$(LOCAL_PATH)/etc/init/mediadrmserver.rc:system/etc/init/mediadrmserver.rc
+    $(call find-copy-subdir-files,*,etc,system/etc/init)
 
 # camera legacy
 PRODUCT_PACKAGES += \
@@ -306,3 +318,62 @@ PRODUCT_PACKAGES += \
 # Engineering mode
 PRODUCT_PACKAGES += \
 	EngineerMode
+
+# The gps config appropriate for this device
+$(call inherit-product, device/common/gps/gps_as_supl.mk)
+
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+# Audio HAL
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl \
+    android.hardware.audio@2.0-service
+
+# Bluetooth
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl \
+    android.hardware.bluetooth@1.0-service \
+    libbt-vendor
+
+# Camera HAL
+PRODUCT_PACKAGES += \
+    camera.device@1.0-impl \
+    camera.device@3.2-impl \
+    android.hardware.camera.provider@2.4-impl
+
+# Graphic HAL
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.1-impl \
+    android.hardware.graphics.mapper@2.0-impl
+
+# Health HAL
+PRODUCT_PACKAGES += \
+    android.hardware.health@1.0-impl \
+    android.hardware.health@1.0-service
+
+# Keymaster HAL
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-impl
+
+# Memtrack HAL
+PRODUCT_PACKAGES += \
+    android.hardware.memtrack@1.0-impl
+
+# Power HAL
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.0-impl
+
+# Sensors
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl \
+    android.hardware.light@2.0-service
+
+# GPS force mode
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.force.gps.mode=gnss
+
+# default.prop
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.adb.secure=0 \
+    ro.secure=0

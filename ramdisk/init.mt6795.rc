@@ -1,26 +1,22 @@
 # MTK platform .rc configure
 
 import init.project.rc
-
-
-
 import init.volte.rc
 import init.mal.rc
 import init.trustonic.rc
-
 import init.ssd.rc
+# init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
 import init.modem.rc
+# *** DO NOT import the new rc file after this line ***
 
-on late-fs
-    # boot time fs tune
-    write /sys/block/mmcblk0/queue/iostats 0
-    write /sys/block/mmcblk0/queue/iosched/slice_idle 0
-    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
-    write /sys/block/mmcblk0/queue/nr_requests 256
+
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
+
+    # Turn off backlight on blank
+    write /sys/class/leds/lcd-backlight/trigger "backlight"
 
 on init
 
@@ -49,31 +45,31 @@ export LD_PRELOAD "libmtk_symbols.so"
     #Create CIP mount point
     mkdir /custom
 
+    chown root system /dev/kmsg
     chmod 0666 /dev/kmsg
 
     mkdir /mnt/cd-rom 0000 system system
 
-    write /proc/sys/net/core/wmem_max 1572864
-    write /proc/sys/net/core/rmem_max 1572864
-
-# Change ION driver permission
-    chmod 0666 /dev/ion
-
-# change lk_env permission
-    chown root system /proc/lk_env
-    chmod 0660 /proc/lk_env
-
-#usbotg
-    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
-    mkdir /storage/usbotg 0700 root root
-
-# increase sysctl_rmem_max and sysctl_wmem_max values to 2M
     write /proc/sys/net/core/wmem_max 2097152
     write /proc/sys/net/core/rmem_max 2097152
 
-# mount different fs start
+    # Change ION driver permission
+    chmod 0666 /dev/ion
 
-on charger
+    #change lk_env permission
+    chown root system /proc/lk_env
+    chmod 0660 /proc/lk_env
+
+   #usbotg
+    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
+    mkdir /storage/usbotg 0700 root root
+
+   # increase sysctl_rmem_max and sysctl_wmem_max values to 2M
+    write /proc/sys/net/core/wmem_max 2097152
+    write /proc/sys/net/core/rmem_max 2097152
+
+    # mount different fs start
+    on charger
     mount ext4 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/system /system ro
     start fuelgauged
     start kpoc_charger
@@ -96,10 +92,6 @@ on fs
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/userdata
     write /proc/bootprof "INIT:Mount_END"
 
-# mount different fs end
-
-on fs
-
    mount iso9660 loop@/system/etc/iAmCdRom.iso /mnt/cd-rom ro
 
 on post-fs
@@ -113,6 +105,14 @@ on post-fs
     chmod 0770 /protect_s
     mkdir /protect_s/properties 0770 system system
 
+    mkdir /nvdata/APCFG 0770 root camera
+    mkdir /nvdata/APCFG/APRDCL 0770 root camera
+    mkdir /nvdata/APCFG/APRDEB 0770 root camera
+    mkdir /nvdata/md     0770 system radio
+    mkdir /nvdata/md_cmn 0770 system radio
+    mkdir /nvdata/media  0770 media audio
+    restorecon_recursive /nvdata
+-
     # once everything is setup, no need to modify /
     mount rootfs rootfs / ro remount
 
@@ -165,11 +165,27 @@ on post-fs
     chown root system /proc/mtprof/reboot_pid
     chown system system /proc/mtprof/gpu_freq
 
+
+
+on late-fs
+    # boot time fs tune
+    write /sys/block/mmcblk0/queue/iostats 0
+    write /sys/block/mmcblk0/queue/iosched/slice_idle 0
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk0/queue/nr_requests 256
+
 on post-fs-data
 
     # create basic filesystem structure
-    mkdir /data/nvram 0771 root system
+    chown root system /nvdata
+    chmod 0771 /nvdata
+    rm /data/nvram
+    symlink /nvdata /data/nvram
     mkdir /data/nvram/media 0771 media audio
+
+    # Set SELinux security contexts on upgrade or policy update.
+    restorecon_recursive /nvdata
+    restorecon /data/nvram
 
     # mxg2320
     mkdir /data/mxg2320 0770 root system
@@ -178,18 +194,26 @@ on post-fs-data
     mkdir /data/mmc3524x 0770 root system
     chmod 0660 /data/misc/wifi/p2p_supplicant.conf
 
+    # remove /data/system/wpa_supplicant which was created in meta mode of JB version, 
+    # wlan will be not able to enabled if this directory exists in L version.
+    rmdir /data/system/wpa_supplicant
+
     #give system access to rfkill device node
     chmod 0660 /dev/rfkill
 
     # create for muxd pts device node , to operate without root
     mkdir /dev/radio 0770 radio radio
-
     mkdir /data/drm/wv 0770 drm system
 
     # GPS
     mkdir /data/gps_mnl 0771 gps system
     mkdir /data/misc/gps 0770 gps system
-    
+    chown gps gps /sys/class/gpsdrv/gps/pwrctl
+    chown gps gps /sys/class/gpsdrv/gps/suspend
+    chown gps gps /sys/class/gpsdrv/gps/state
+    chown gps gps /sys/class/gpsdrv/gps/pwrsave
+    chown gps gps /sys/class/gpsdrv/gps/status
+
     # Smartwake
     chown system system /sys/devices/soc/soc:touch@/smartwake_active
     chown system system /sys/devices/soc/soc:touch@/wakeup_gesture
@@ -345,7 +369,8 @@ on post-fs-data
     chown system system /sys/class/misc/m_baro_misc/baroflush
     #Accdet
     chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
-    #VideoCodec
+    
+	#VideoCodec
     chmod 0666 /dev/Vcodec
     chown media system /dev/Vcodec
 
@@ -360,6 +385,10 @@ on post-fs-data
 
     #Charging Battery
     chown radio radio /sys/devices/platform/battery/Charging_CallState
+
+    # PMIC property
+    chown radio system /sys/devices/platform/mt-pmic/low_battery_protect_stop
+    chown radio system /sys/devices/platform/mt-pmic/low_battery_protect_ut
 
     mkdir /data/amit/ 0770 system system
     mkdir /data/misc/sensors 0666 system system
@@ -378,9 +407,9 @@ on post-fs-data
     chown system /sys/devices/platform/msensor/driver/cpsopmode
     chown system /sys/devices/platform/msensor/driver/cpsreptxy
     chown system /sys/devices/platform/msensor/driver/cpsreptz
-
     mkdir       /data/data/mcube 0664 system system
-    # GPIO
+
+	# GPIO
     chmod 0664 /dev/mtgpio
 
     # SPM SODI Enable
@@ -452,6 +481,8 @@ on post-fs-data
 
     # bluetooth
     mkdir /data/@btmtk 0770 bluetooth net_bt
+    chown bluetooth bluetooth /data/@btmtk/host_cache
+    chown bluetooth bluetooth /data/@btmtk/dev_cache
     chown bluetooth bluetooth /dev/hid-keyboard
     chmod 0660 /dev/hid-keyboard
 
@@ -536,7 +567,7 @@ on post-fs-data
     chown system media /dev/mt-mdp
 
     chmod 0660 /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
-    chown media media /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
+    chown system media /sys/bus/platform/drivers/mem_bw_ctrl/concurrency_scenario
 
     # SMI
     chmod 0666 /dev/MTK_SMI
@@ -578,6 +609,9 @@ on post-fs-data
     # AGPS
     mkdir /data/agps_supl 0771 gps system
 
+    chmod 0660 /dev/ttyC2
+    chown system gps /dev/ttyC2
+
     # secure memory
     chown system system /proc/secmem0
 
@@ -590,6 +624,33 @@ on post-fs-data
 
 	#Thermal
 	mkdir /data/.tp/ 0775 system system
+
+	# Fingerprint
+	chmod 0666 /dev/esfp0
+    chown system system /dev/esfp0
+
+    # autok
+    chown root system /sys/autok/debug
+    chown root system /sys/autok/param_count
+    chown root system /sys/autok/ready
+    chown root system /sys/autok/ss_corner
+    chown root system /sys/autok/suggest_vol
+    chown root system /sys/autok/stage1/2/DONE
+    chown root system /sys/autok/stage1/2/PARAMS
+    chown root system /sys/autok/stage1/2/VOLTAGE
+    chown root system /sys/autok/stage1/2/LOG
+    chown root system /sys/autok/stage2/2
+
+    # IO Scheduler
+    chown system system /sys/block/mmcblk0/queue/scheduler
+    chmod 0660 /sys/block/mmcblk0/queue/scheduler
+
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
 # End of adding by MTK drivers
 # -----------------------
@@ -614,10 +675,10 @@ on boot
     write /proc/sys/vm/dirty_writeback_centisecs 300
 
     chown radio system /sys/power/vcorefs/pwr_ctrl
-	  chmod 0660 /sys/power/autosleep
+	chmod 0660 /sys/power/autosleep
     chown system radio /sys/class/leds/lcd-backlight/brightness
     chmod 0664 /sys/class/leds/lcd-backlight/brightness
-     chmod 0660 /sys/class/BOOT/BOOT/boot/boot_mode
+    chmod 0660 /sys/class/BOOT/BOOT/boot/boot_mode
     chown system system /sys/class/BOOT/BOOT/boot/boot_mode
 
 
@@ -746,21 +807,21 @@ on boot
     chown radio system /proc/cpufreq/cpufreq_cur_freq
     chown radio system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
-# WMT proc
-		chown shell system /proc/driver/wmt_dbg
-		chown shell system /proc/driver/wmt_aee
+    # WMT proc
+	chown shell system /proc/driver/wmt_dbg
+	chown shell system /proc/driver/wmt_aee
 
-#Define device for ATCID
+    #Define device for ATCID
     chmod 0660 /dev/ttyGS0
     chown system radio /dev/ttyGS0
     chmod 0660 /dev/ttyGS1
     chown system radio /dev/ttyGS1
 
-# BT relayer mode used VCOM
+    # BT relayer mode used VCOM
     chmod 0660 /dev/ttyGS2
     chown bluetooth radio /dev/ttyGS2
 
-# define device for EMCSMDLOGGER
+    # define device for EMCSMDLOGGER
     chmod 0660 /dev/ttyGS3
     chown system radio /dev/ttyGS3
 
