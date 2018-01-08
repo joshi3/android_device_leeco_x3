@@ -315,10 +315,6 @@ PRODUCT_PACKAGES += \
 	libbwc \
 	libm4u
 
-# Engineering mode
-PRODUCT_PACKAGES += \
-	EngineerMode
-
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_as_supl.mk)
 
