@@ -69,8 +69,8 @@ BOARD_MKBOOTIMG_ARGS := \
 	--second_offset 0x00e88000 \
 	--tags_offset 0x0df88000 \
 	--board MT6795
-TARGET_KERNEL_SOURCE := kernel/leeco/x3
-TARGET_KERNEL_CONFIG := x500_defconfig
+#TARGET_KERNEL_SOURCE := kernel/leeco/x3
+#TARGET_KERNEL_CONFIG := x500_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 
@@ -203,22 +203,6 @@ BOARD_RED_LED_PATH := "/sys/class/leds/red"
 BOARD_GREEN_LED_PATH := "/sys/class/leds/green"
 BOARD_BLUE_LED_PATH := "/sys/class/leds/blue"
 
-# Tethering
-PRODUCT_PROPERTY_OVERRIDES += net.tethering.noprovisioning=true
-
-# Google properties overides
- PRODUCT_PROPERTY_OVERRIDES += \
- keyguard.no_require_sim=true \
- ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
- ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
- ro.com.google.clientidbase=android-google \
- ro.com.android.wifi-watchlist=GoogleGuest \
- ro.error.receiver.system.apps=com.google.android.gms \
- ro.setupwizard.enterprise_mode=1 \
- ro.com.android.dataroaming=false \
- net.tethering.noprovisioning=true \
- ro.setupwizard.rotation_locked=true
- 
  # DEXPREOPT
 ifeq ($(TARGET_BUILD_VARIANT),user)
 WITH_DEXPREOPT := true
