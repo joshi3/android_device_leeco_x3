@@ -109,10 +109,15 @@
 /dev/ttyACM0              0660   radio      radio
 
 #Add Wake Gestures @Bule 20161119
-/sys/android_touch/*       0664  system   system
+#/sys/android_touch/*       0664  system   system
 
 #Add Fingerprint @Bule 20161119
 /dev/goodix_fp              0660   root       system
 
 #Add Wake Gestures @Bule 20161123
-/sys/bus/i2c/devices/i2c-2/2-004b/*       0664  system   system
+#/sys/bus/i2c/devices/i2c-2/2-004b/*       0664  system   system
+
+# Make HW RNG readable by group system to let EntropyMixer read it.
+/dev/hw_random            0440   root       system
+/dev/ashmem               0666   root       root
+/dev/binder               0666   root       root

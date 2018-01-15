@@ -14,7 +14,7 @@ LOCAL_PATH := device/leeco/x3
 
 # Manifest
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/manifest.xml:system/vendor/manifest.xml
+    $(LOCAL_PATH)/configs/manifest.xml: $(TARGET_COPY_OUT_VENDOR)/manifest.xml
 
 	# TWRP
 PRODUCT_COPY_FILES += \
@@ -24,11 +24,11 @@ PRODUCT_COPY_FILES += \
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Screen density
-PRODUCT_AAPT_CONFIG := normal xhdpi xxhdpi
+PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Recovery allowed devices
-TARGET_OTA_ASSERT_DEVICE := x3,X500,X507,X509,X3,x500,x507,x509,X502,x502
+TARGET_OTA_ASSERT_DEVICE := x3,X500,X507,X509,X3,x500,x507,x509,X502,x502,.
 
 # Power
 PRODUCT_PACKAGES += \
@@ -110,7 +110,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
 	frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml \
 	frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-	media.stagefright.legacyencoder=0
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -155,7 +154,8 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/ramdisk/init.volte.rc:root/init.volte.rc \
 	$(LOCAL_PATH)/ramdisk/init.mal.rc:root/init.mal.rc \
 	$(LOCAL_PATH)/ramdisk/init.usb.configfs.rc:root/init.usb.configfs.rc \
-	$(LOCAL_PATH)/ramdisk/init.trustonic.rc:root/init.trustonic.rc
+	$(LOCAL_PATH)/ramdisk/init.trustonic.rc:root/init.trustonic.rc \
+    $(LOCAL_PATH)/ramdisk/init.xlog.rc:root/init.xlog.rc
 
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
@@ -198,7 +198,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/mtk_clear_motion.cfg:system/etc/mtk_clear_motion.cfg
 
 PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/audio/audio_device.xml:system/etc/audio_device.xml \
+	$(LOCAL_PATH)/configs/audio/audio_device.xml: $(TARGET_COPY_OUT_VENDOR)/etc/audio_device.xml \
 	$(LOCAL_PATH)/configs/audio/audio_effects.conf:system/etc/audio_effects.conf \
 	$(LOCAL_PATH)/configs/audio/audio_em.xml:system/etc/audio_em.xml \
 	$(LOCAL_PATH)/configs/audio/audio_policy.conf:system/etc/audio_policy.conf
@@ -213,9 +213,9 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/permissions/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml
 
 PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf \
+	$(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf: $(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
 	$(LOCAL_PATH)/configs/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-	$(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf
+	$(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf: $(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/bluetooth/auto_pair_blacklist.conf:system/etc/bluetooth/auto_pair_blacklist.conf \
@@ -259,7 +259,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/perfservscntbl.txt:system/etc/perfservscntbl.txt
 
 PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/agps_profiles_conf2.xml:system/etc/agps_profiles_conf2.xml
+	$(LOCAL_PATH)/configs/agps_profiles_conf2.xml: $(TARGET_COPY_OUT_VENDOR)/etc/agps_profiles_conf2.xml
 
 PRODUCT_PACKAGES += \
         fingerprint.default
@@ -277,6 +277,8 @@ PRODUCT_COPY_FILES += \
 # MTK Helpers
 PRODUCT_PACKAGES += \
 	libccci_util \
+   android.hardware.radio@1.0 \
+   android.hardware.radio.deprecated@1.0 \
 	libmtk_symbols
 
 # Sensor Calibration
@@ -305,7 +307,7 @@ PRODUCT_PACKAGES += \
 
 # Mediaserver with system group
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,etc,system/etc/init)
+    $(call find-copy-subdir-files,*,etc, $(TARGET_COPY_OUT_VENDOR)/etc)
 
 # camera legacy
 PRODUCT_PACKAGES += \
@@ -343,9 +345,9 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@2.0-impl
 
 # Health HAL
-PRODUCT_PACKAGES += \
-    android.hardware.health@1.0-impl \
-    android.hardware.health@1.0-service
+#PRODUCT_PACKAGES += \
+ #   android.hardware.health@1.0-impl \
+ #   android.hardware.health@1.0-service
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
@@ -372,3 +374,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.adb.secure=0 \
     ro.secure=0
+
+# Default OMX service to non-Treble
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.media.treble_omx=false
