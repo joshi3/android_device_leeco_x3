@@ -28,7 +28,7 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Recovery allowed devices
-TARGET_OTA_ASSERT_DEVICE := x3,X500,X507,X509,X3,x500,x507,x509,X502,x502,.
+TARGET_OTA_ASSERT_DEVICE := x3,X500,X507,X509,X3,x500,x507,x509,X502,x502
 
 # Power
 PRODUCT_PACKAGES += \
@@ -80,62 +80,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	persist.call_recording.enabled=true \
 	persist.call_recording.src=1
 
-# Audio
-PRODUCT_PACKAGES += \
-	audio.a2dp.default \
-	audio.usb.default \
-	audio.r_submix.default \
-	audio_policy.default \
-	libaudio-resampler \
-	libaudiopolicymanagerdefault \
-	libtinyalsa \
-	libtinycompress \
-	libtinyxml \
-	audio_policy.stub \
-	libtinymix \
-	libfs_mgr \
-	SoundRecorder
 
-# Wifi
-PRODUCT_PACKAGES += \
-	android.hardware.wifi@1.0-service \
-	lib_driver_cmd_mt66xx \
-	libwpa_client \
-	hostapd \
-	wpa_supplicant
 
-# Media
-PRODUCT_COPY_FILES += \
-	frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-	frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-	frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:system/etc/media_codecs_google_video_le.xml \
-	frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-	e2fsck \
-	fibmap.f2fs \
-	fsck.f2fs \
-	mkfs.f2fs \
-	make_ext4fs \
-	resize2fs \
-	setup_fs \
-	ext4_resize \
-	libext2_blkid \
-	libext2_uuid_static \
-	superumount
-
-# exFAT
-PRODUCT_PACKAGES += \
-	mount.exfat \
-	fsck.exfat \
-	mkfs.exfat
-
-# NTFS
-PRODUCT_PACKAGES += \
-	fsck.ntfs \
-	mkfs.ntfs \
-	mount.ntfs
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
@@ -155,38 +101,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/ramdisk/init.mal.rc:root/init.mal.rc \
 	$(LOCAL_PATH)/ramdisk/init.usb.configfs.rc:root/init.usb.configfs.rc \
 	$(LOCAL_PATH)/ramdisk/init.trustonic.rc:root/init.trustonic.rc \
-    $(LOCAL_PATH)/ramdisk/init.xlog.rc:root/init.xlog.rc
-
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-	frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
-	frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-	frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
-	frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-	frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-	frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
-	frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-	frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.compass.xml \
-	frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
-	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
-	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.xml \
-	frameworks/native/data/etc/android.hardware.touchscreen.xml:system/etc/permissions/android.hardware.touchscreen.xml \
-	frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
-	frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
-	frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
-	frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
-	frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
-	frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
-	frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
-	frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-	frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
-	frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
-	frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-	frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
-	frameworks/native/data/etc/android.hardware.camera.manual_sensor.xml:system/etc/permissions/android.hardware.camera.manual_sensor.xml
-
+    $(LOCAL_PATH)/ramdisk/init.xlog.rc:root/init.xlog.
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/media/media_codecs.xml:system/etc/media_codecs.xml \
 	$(LOCAL_PATH)/configs/media/media_codecs.xml:system/etc/permissions/media_codecs.xml \
@@ -212,10 +127,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/permissions/android.hardware.camera.manual_postprocessing.xml:system/etc/permissions/android.hardware.camera.manual_postprocessing.xml \
 	$(LOCAL_PATH)/configs/permissions/android.hardware.camera.raw.xml:system/etc/permissions/android.hardware.camera.raw.xml
 
-PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/wifi/p2p_supplicant_overlay.conf: $(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
-	$(LOCAL_PATH)/configs/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-	$(LOCAL_PATH)/configs/wifi/wpa_supplicant_overlay.conf: $(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/bluetooth/auto_pair_blacklist.conf:system/etc/bluetooth/auto_pair_blacklist.conf \
@@ -232,9 +143,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/keylayout/mtk-tpd.kl:system/usr/keylayout/mtk-tpd.kl\
 	$(LOCAL_PATH)/configs/keylayout/synaptics_dsx_i2c.kl:system/usr/keylayout/synaptics_dsx_i2c.kl
 
-PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/ril_conf/ecc_list.xml:system/etc/ecc_list.xml \
-	$(LOCAL_PATH)/configs/ril_conf/spn-conf.xml:system/etc/spn-conf.xml
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/dhcpcd/dhcpcd-run-hooks:system/etc/dhcpcd/dhcpcd-run-hooks \
@@ -258,8 +166,7 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/perfservboosttbl.txt:system/etc/perfservboosttbl.txt \
 	$(LOCAL_PATH)/configs/perfservscntbl.txt:system/etc/perfservscntbl.txt
 
-PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/agps_profiles_conf2.xml: $(TARGET_COPY_OUT_VENDOR)/etc/agps_profiles_conf2.xml
+
 
 PRODUCT_PACKAGES += \
         fingerprint.default
@@ -294,7 +201,6 @@ PRODUCT_PACKAGES += \
 
 # MTK Helpers
 PRODUCT_PACKAGES += \
-    libion \
     libwvmsym \
     libiodev
 
