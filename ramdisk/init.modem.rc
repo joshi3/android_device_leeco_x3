@@ -11,6 +11,33 @@ on post-fs-data
     # Modem related device nodes
     mkdir /data/nvram/md  0770 root system
     chown radio radio /sys/kernel/ccci/boot
+    chown radio radio /dev/ccci_fs
+    chown radio radio /dev/ccci_ioctl0
+    chown radio radio /dev/ccci_ioctl1
+    chown radio radio /dev/ccci_ipc_1220_0
+    chown radio radio /dev/ccci_monitor
+    chown system audio /dev/ccci_aud
+
+service permission_check /system/bin/permission_check
+    class main
+    user root
+    group system radio
+    oneshot
+
+service ccci_fsd /system/bin/ccci_fsd 0
+    user radio
+    group radio system
+    oneshot
+
+service ccci2_fsd /system/bin/ccci_fsd 1
+    user radio
+    group  radio system
+    oneshot
+
+service ccci_mdinit /system/bin/ccci_mdinit 0
+    user system
+    group radio system
+    oneshot
 
 #SeLinux
     mkdir /data/ccci_cfg 0770 system radio

@@ -16,6 +16,8 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 # Release name
 PRODUCT_RELEASE_NAME := x3
 
+EXTENDED_FONT_FOOTPRINT := true
+
 # Device display
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1080
@@ -31,6 +33,9 @@ PRODUCT_RESTRICT_VENDOR_FILES := false
 
 # SDcard
 PRODUCT_CHARACTERISTICS := nosdcard
+
+PRODUCT_DEFAULT_LANGUAGE := en
+PRODUCT_DEFAULT_REGION   := IN
 
 # Google client ID property.
 PRODUCT_GMS_CLIENTID_BASE := android-leeco

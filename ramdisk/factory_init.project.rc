@@ -20,6 +20,8 @@ on post-fs-data
 
     chmod 0660 /dev/stpwmt
     chown system system /dev/stpwmt
+    chmod 0660 /dev/wmtdetect
+    chown system system /dev/wmtdetect
 
     mknod /dev/wmtWifi c 153 0
     chmod 0660 /dev/wmtWifi
