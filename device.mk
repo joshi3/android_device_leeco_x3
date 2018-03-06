@@ -147,4 +147,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.less-secure=true
 
 # Common stuff
-$(call inherit-product, vendor/mad/config/common.mk)
+$(call inherit-product, vendor/leeco/mad/config/common.mk)
