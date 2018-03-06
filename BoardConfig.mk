@@ -1,6 +1,6 @@
 -include vendor/leeco/x3/BoardConfigVendor.mk
 LOCAL_PATH := device/leeco/x3
-include vendor/mad/config/board.mk
+include vendor/leeco/mad/config/board.mk
 
 ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_NO_BOOTLOADER := true
@@ -80,7 +80,7 @@ TARGET_INCLUDE_GPS_SYMBOLS := true
 TARGET_INCLUDE_GUI_SYMBOLS := true
 #TARGET_INCLUDE_CAMERA_SYMBOLS := true
 
-include vendor/mad/config/symbols.mk
+include vendor/leeco/mad/config/symbols.mk
 
 
 # Display

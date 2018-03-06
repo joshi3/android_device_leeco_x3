@@ -112,9 +112,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.mount.fs=EXT4
 
-# MTK Helpers
+# RIL
 PRODUCT_PACKAGES += \
-	libccci_util
+   android.hardware.radio@1.0 \
+   android.hardware.radio.deprecated@1.0 \
+   libccci_util
 
 # MTK Helpers
 PRODUCT_PACKAGES += \
