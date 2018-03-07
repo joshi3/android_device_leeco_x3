@@ -5,7 +5,7 @@ import init.volte.rc
 import init.mal.rc
 import init.trustonic.rc
 
-import init.xlog.rc
+#import init.xlog.rc
 # init.modem.rc must be the LAST rc file because vold.post_fs_data_done is set in it
 import init.modem.rc
 # *** DO NOT import the new rc file after this line ***
